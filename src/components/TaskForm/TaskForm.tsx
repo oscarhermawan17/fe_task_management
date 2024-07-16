@@ -1,16 +1,16 @@
-// src/components/TaskForm.tsx
 import React from 'react';
 import { useForm, SubmitHandler } from 'react-hook-form';
 import { Box, TextField, Button, Select, MenuItem, FormControl, FormHelperText, InputLabel } from '@mui/material';
 
 import Styles from './TaskForm.style'
+import { fakeDataStatus as statusData } from '../../containers/TaskList'
 import type { TaskFormProps, TaskFormData } from './TaskForm.type'
 
 const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, defaultValues }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<TaskFormData>({ defaultValues });
-
   const handleFormSubmit: SubmitHandler<TaskFormData> = data => {
     const sanitizedData = {
+      id: defaultValues?.id ? defaultValues.id : '',
       title: data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
       description: data.description.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
       status: data.status
@@ -47,10 +47,11 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, defaultValues }) => {
           id="status"
           label="Status"
           {...register('status', { required: 'Status is required' })}
+          defaultValue={defaultValues?.status}
         >
-          <MenuItem value="Pending">Pending</MenuItem>
-          <MenuItem value="In Progress">In Progress</MenuItem>
-          <MenuItem value="Completed">Completed</MenuItem>
+          {statusData.map(status => (
+            <MenuItem value={status}>{status}</MenuItem>
+          ))}
         </Select>
         {errors.status && <FormHelperText>{errors.status.message}</FormHelperText>}
       </FormControl>

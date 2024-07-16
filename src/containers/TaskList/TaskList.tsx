@@ -1,27 +1,21 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
 import { Box, CircularProgress, Button, Modal } from '@mui/material';
+import { v4 as uuidv4 } from 'uuid';
 import Grid from "@mui/system/Unstable_Grid"
 import axios from 'axios';
 
 import { fakeDataStatus, fakeDataCards } from './TaskListData'
 import TaskForm from '../../components/TaskForm';
-import type { Task, TaskFormData } from './TaskList.type'
+import type { TaskFormData } from './TaskList.type'
 import Styles from './TaskList.style';
 
 const TaskItem = lazy(() => import('../../components/TaskItem'));
 
 const TaskList: React.FC = () => {
-  const [tasks, setTasks] = useState<Task[]>([...fakeDataCards]);
+  const [tasks, setTasks] = useState<TaskFormData[]>([...fakeDataCards]);
   const [statusCard, _] = useState([...fakeDataStatus ])
   const [modalForm, setModalForm] = useState(false)
-
-  const handleAddTask = (newTask: TaskFormData) => {
-    setTasks((prevState) => [...prevState, {
-      id: prevState.length + 1,
-      ...newTask
-    }])
-    setModalForm(false);
-  };
+  const [defaultUpdatedValues, setDefaultUpdatedValues] = useState<TaskFormData | undefined>(undefined)
 
   useEffect(() => {
     axios.get('/api/tasks')
@@ -29,14 +23,52 @@ const TaskList: React.FC = () => {
       .catch(error => console.error(error));
   }, []);
 
+  const handleDelete = (id: string) => {
+    const deleteSelectedTask = tasks.filter(task => task.id !== id)
+    setTasks(deleteSelectedTask)
+  }
+
+  const openModal = (id: string) => {
+    const taskValue = tasks.find(task => task.id === id)
+    if(taskValue === undefined) {
+      setDefaultUpdatedValues(undefined)
+    } else {
+      setDefaultUpdatedValues({
+        id: id,
+        title: taskValue.title,
+        description: taskValue.description,
+        status: taskValue.status
+      })
+    }
+    setModalForm(true)
+  }
+
+  const closeAndReset = () => {
+    setDefaultUpdatedValues(undefined)
+    setModalForm(false)
+  }
+
+  const submitTask = (newTask: TaskFormData) => {
+    if(newTask.id) {
+      const updateTask = tasks.map(task => task.id === newTask.id ? newTask : task)
+      setTasks(updateTask)
+    } else {
+      setTasks((prevState) => [...prevState, {
+        ...newTask,
+        id: uuidv4(),
+      }])
+    }
+    closeAndReset()
+  };
+
   const cardList = (status: string) => {
     return (
       <Grid container spacing={1}>
-          {tasks.filter(filterTask => filterTask.status === status)
-            .map(task => (
-              <Grid xs={6}>
-                <TaskItem key={task.id} task={task} />
-              </Grid>))}
+        {tasks.filter(filterTask => filterTask.status === status).map(task => (
+          <Grid xs={6} key={task.id}>
+            <TaskItem key={task.id} task={task} onDelete={handleDelete} openModalForm={openModal}/>
+          </Grid>
+        ))}
       </Grid>
     )
   }
@@ -57,10 +89,10 @@ const TaskList: React.FC = () => {
         ))}
       </Grid>
      
-      <Modal open={modalForm} onClose={() => setModalForm(false)}>
+      <Modal open={modalForm} onClose={() => closeAndReset()}>
         <Box sx={Styles.wrapperBoxModal}>
           <Box sx={Styles.titleModal}>Add Form</Box>
-          <TaskForm onSubmit={handleAddTask}/>
+          <TaskForm onSubmit={submitTask} defaultValues={defaultUpdatedValues}/>
         </Box>
       </Modal>
     </Box>
