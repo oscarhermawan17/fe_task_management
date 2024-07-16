@@ -1,10 +1,5 @@
-function App() {
+import TaskList from "./containers/TaskList";
 
-  return (
-    <>
-      Skeleton
-    </>
-  )
-}
+const App = () => <TaskList />
 
-export default App
+export default App;
