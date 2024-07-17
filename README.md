@@ -2,6 +2,14 @@
 Front End Task Management
 
 ### Overview of this application
+This is an app for organizing users' tasks. Users can view their task lists, create new tasks, update existing tasks, and delete tasks.
+Technologies Used:
+<ul>
+  <li>React JS</li>
+  <li>Vite JS</li>
+  <li>Material UI</li>
+</ul>
+
 
 ### Minimun Requirement
 Node Version 18. I recommend using Node Version 20 (LTS Version)
