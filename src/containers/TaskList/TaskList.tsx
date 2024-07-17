@@ -1,5 +1,5 @@
 import React, { Suspense, lazy, useState, useEffect } from 'react';
-import { Box, CircularProgress, Button, Modal } from '@mui/material';
+import { Container, Box, CircularProgress, Button, Modal } from '@mui/material';
 import { v4 as uuidv4 } from 'uuid';
 import Grid from "@mui/system/Unstable_Grid"
 import axios from 'axios';
@@ -65,7 +65,7 @@ const TaskList: React.FC = () => {
     return (
       <Grid container spacing={1}>
         {tasks.filter(filterTask => filterTask.status === status).map(task => (
-          <Grid xs={6} key={task.id}>
+          <Grid md={6} xs={12} key={task.id}>
             <TaskItem key={task.id} task={task} onDelete={handleDelete} openModalForm={openModal}/>
           </Grid>
         ))}
@@ -74,13 +74,13 @@ const TaskList: React.FC = () => {
   }
 
   return (
-    <Box sx={Styles.wrapper}>
+    <Container maxWidth="xl">
       <Box sx={Styles.buttonAddTask}>
         <Button variant="contained" onClick={() => setModalForm(true)}>Add Task</Button>
       </Box>
       <Grid container spacing={4} sx={Styles.wrapperGridTaskList}>
         {statusCard.map((status, index) => (
-          <Grid key={index} xs={4} sx={Styles.wrapperTaskListStatus}>
+          <Grid key={index} md={4} xs={12} sx={Styles.wrapperTaskListStatus}>
             <Box sx={Styles.taskListStatus}>{status}</Box>
             <Suspense fallback={<CircularProgress />}>
               {cardList(status)}
@@ -91,11 +91,11 @@ const TaskList: React.FC = () => {
      
       <Modal open={modalForm} onClose={() => closeAndReset()}>
         <Box sx={Styles.wrapperBoxModal}>
-          <Box sx={Styles.titleModal}>Add Form</Box>
+          <Box sx={Styles.titleModal}>Task Form</Box>
           <TaskForm onSubmit={submitTask} defaultValues={defaultUpdatedValues}/>
         </Box>
       </Modal>
-    </Box>
+    </Container>
   );
 };
 
