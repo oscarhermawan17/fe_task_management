@@ -34,10 +34,10 @@ export default function SignIn() {
         localStorage.setItem('token', token);
         navigate('/');
       } else {
-        console.error('Token is not available in the response');
+        alert('Invalid username or password')
       }
     } catch (error) {
-      console.error('Error during login:', error);
+        alert((error as Error).message);
     }
   };
 
