@@ -5,7 +5,6 @@ import Styles from './TaskItem.style'
 import type { TaskItemProps } from './TaskItem.type'
 
 const TaskItem: React.FC<TaskItemProps> = ({ id, title, description, onDelete, openModalForm }) => {
-  console.log('task item', id)
   return (
     <Box sx={Styles.boxWrapper}>
       <Typography variant="body1" sx={Styles.title}>{title}</Typography>
