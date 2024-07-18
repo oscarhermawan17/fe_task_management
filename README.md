@@ -23,13 +23,12 @@ Node Version 18.x.x. I recommend using Node Version 20.x.x (LTS Version).
       <li>VITE_API_URL=<code>api</code> (<code>api</code> is the endpoint URL that will be used)<li>
     </ul>
   </li>
-  <li>Run <code>npm install</code></li>
-  <li>Run <code>npm run dev</code></li>
-  <li>Open <code>http://localhost:port/</code> on the browser</li>
+  <li>Run <code>npm install</code>. This command will download all modules and may take a while</li>
+  <li>Run <code>npm run dev</code>. This command will run our application in development mode</li>
+  <li>Open <code>http://localhost:port</code> on the browser</li>
 </ul>
 
 ### 4. How To Run Unit Test ?
 Make sure you have completed the third step first. (Run <code>npm install</code>)
 Run <code>npm run test</code> 
-
 
