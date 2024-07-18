@@ -1,34 +1,49 @@
-import React, { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, lazy, useState, useEffect } from 'react';
 import { Container, Box, CircularProgress, Button, Modal } from '@mui/material';
-import { v4 as uuidv4 } from 'uuid';
 import Grid from "@mui/system/Unstable_Grid"
 import axios from 'axios';
 
-import { fakeDataStatus, fakeDataCards } from './TaskListData'
+import { fakeDataStatus } from './TaskListData'
 import TaskForm from '../../components/TaskForm';
 import type { TaskFormData } from './TaskList.type'
 import Styles from './TaskList.style';
 
 const TaskItem = lazy(() => import('../../components/TaskItem'));
 
-const TaskList: React.FC = () => {
-  const [tasks, setTasks] = useState<TaskFormData[]>([...fakeDataCards]);
+const TaskList = ({ token } : { token:  string | null }) => {
+  const [tasks, setTasks] = useState<TaskFormData[]>([]);
   const [statusCard, _] = useState([...fakeDataStatus ])
   const [modalForm, setModalForm] = useState(false)
   const [defaultUpdatedValues, setDefaultUpdatedValues] = useState<TaskFormData | undefined>(undefined)
 
   useEffect(() => {
-    axios.get('/api/tasks')
-      .then(response => setTasks(response.data))
-      .catch(error => console.error(error));
+    axios.get(`${import.meta.env.VITE_API_URL}/tasks`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    })
+    .then(response => setTasks(response.data))
+    .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = (id: string) => {
-    const deleteSelectedTask = tasks.filter(task => task.id !== id)
-    setTasks(deleteSelectedTask)
+  const handleDelete = async (id: number) => {
+    try {
+      const response = await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+  
+      if (response.status === 204) {
+        const deleteSelectedTask = tasks.filter(task => task.id !== id)
+        setTasks(deleteSelectedTask)
+      }
+    } catch (error) {
+      console.error('Error deleting task:', error);
+    }
   }
 
-  const openModal = (id: string) => {
+  const openModal = (id: number) => {
     const taskValue = tasks.find(task => task.id === id)
     if(taskValue === undefined) {
       setDefaultUpdatedValues(undefined)
@@ -48,15 +63,51 @@ const TaskList: React.FC = () => {
     setModalForm(false)
   }
 
-  const submitTask = (newTask: TaskFormData) => {
+  const submitTask = async (newTask: TaskFormData) => {
+    // If have ID, it should be Update
     if(newTask.id) {
-      const updateTask = tasks.map(task => task.id === newTask.id ? newTask : task)
-      setTasks(updateTask)
+      try {
+        const response = await axios.put(`${import.meta.env.VITE_API_URL}/tasks/${newTask.id}`, {
+          title: newTask.title,
+          description: newTask.description,
+          status: newTask.status
+        }, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        const updateTask = tasks.map(task => task.id === newTask.id ? {
+          id: response.data.id,
+          title: response.data.title,
+          description: response.data.description,
+          status: response.data.status
+        } : task)
+        setTasks(updateTask)
+      } catch (error) {
+        console.error('Error while updating task:', error);
+      }
+    // If doesnt have ID, should be create new task
     } else {
-      setTasks((prevState) => [...prevState, {
-        ...newTask,
-        id: uuidv4(),
-      }])
+        try {
+          const response = await axios.post(`${import.meta.env.VITE_API_URL}/tasks`, {
+            title: newTask.title,
+            description: newTask.description,
+            status: newTask.status
+          }, {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          });
+          setTasks((prevState) => [...prevState, {
+            id: response.data.id,
+            title: response.data.title,
+            description: response.data.description,
+            status: response.data.status
+          }])
+        } catch (error) {
+          console.error('Error creating task:', error);
+        }
     }
     closeAndReset()
   };

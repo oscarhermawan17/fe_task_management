@@ -1,5 +1,5 @@
 export type Task = {
-  id: string;
+  id: number | undefined;
   title: string;
   description: string;
   status: string;
@@ -7,6 +7,6 @@ export type Task = {
 
 export type TaskItemProps = {
   task: Task;
-  onDelete: (id: string) => void;
-  openModalForm: (id: string) => void;
+  onDelete: (id: number | undefined) => void;
+  openModalForm: (id: number | undefined) => void;
 }

@@ -10,7 +10,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, defaultValues }) => {
   const { register, handleSubmit, formState: { errors } } = useForm<TaskFormData>({ defaultValues });
   const handleFormSubmit: SubmitHandler<TaskFormData> = data => {
     const sanitizedData = {
-      id: defaultValues?.id ? defaultValues.id : '',
+      id: defaultValues?.id ? defaultValues.id : undefined,
       title: data.title.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
       description: data.description.replace(/</g, "&lt;").replace(/>/g, "&gt;"),
       status: data.status

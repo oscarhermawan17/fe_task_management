@@ -1,5 +1,5 @@
 export type TaskFormData = {
-  id: string;
+  id: number | undefined;
   title: string;
   description: string;
   status: string;
