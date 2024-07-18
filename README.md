@@ -9,6 +9,7 @@ Technologies Used:
   <li>Vite JS</li>
   <li>Material UI</li>
 </ul>
+The BackEnd (RESTful API app) can be seen [here](https://github.com/oscarhermawan17/be_task_management)
 
 
 ### 2. Minimun Requirement
