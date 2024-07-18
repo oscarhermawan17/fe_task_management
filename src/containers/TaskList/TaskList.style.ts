@@ -5,6 +5,7 @@ const Styles = {
     paddingTop: 2
   },
   buttonAddTask: {
+    marginTop: 4,
     display: "flex",
     justifyContent: "flex-end"
   },
