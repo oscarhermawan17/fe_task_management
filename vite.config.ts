@@ -17,4 +17,9 @@ export default defineConfig({
   server: {
     port: parseInt(process.env.VITE_PORT) || 3017,
   },
+  test: {
+    environment: 'jsdom',
+    globals: true,
+    setupFiles: './vitest.setup.ts',
+  },
 })
