@@ -7,6 +7,6 @@ export type Task = {
 
 export type TaskItemProps = {
   task: Task;
-  onDelete: (id: number | undefined) => void;
+  onDelete: (id: number | undefined) => Promise<void>;
   openModalForm: (id: number | undefined) => void;
 }

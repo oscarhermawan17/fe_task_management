@@ -26,7 +26,7 @@ const TaskList = ({ token } : { token:  string | null }) => {
     .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = async (id: number) => {
+  const handleDelete = async (id: number | undefined) => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${id}`, {
         headers: {
@@ -43,7 +43,7 @@ const TaskList = ({ token } : { token:  string | null }) => {
     }
   }
 
-  const openModal = (id: number) => {
+  const openModal = (id: number | undefined) => {
     const taskValue = tasks.find(task => task.id === id)
     if(taskValue === undefined) {
       setDefaultUpdatedValues(undefined)
