@@ -1,17 +1,19 @@
+import { memo } from 'react'
 import { Box, Button, Typography } from '@mui/material';
 
 import Styles from './TaskItem.style'
 import type { TaskItemProps } from './TaskItem.type'
 
-const TaskItem: React.FC<TaskItemProps> = ({ task, onDelete, openModalForm }) => {
+const TaskItem: React.FC<TaskItemProps> = ({ id, title, description, onDelete, openModalForm }) => {
+  console.log('task item', id)
   return (
     <Box sx={Styles.boxWrapper}>
-      <Typography variant="body1" sx={Styles.title}>{task.title}</Typography>
-      <Typography variant="subtitle2" sx={Styles.description}>{task.description}</Typography>
-      <Button variant="contained" sx={Styles.buttonSpaceTop} onClick={() => openModalForm(task.id)} fullWidth>Edit</Button>
-      <Button variant="contained" color="error" sx={Styles.buttonSpaceTop} onClick={() => onDelete(task.id)} fullWidth>Delete</Button>
+      <Typography variant="body1" sx={Styles.title}>{title}</Typography>
+      <Typography variant="subtitle2" sx={Styles.description}>{description}</Typography>
+      <Button variant="contained" sx={Styles.buttonSpaceTop} onClick={() => openModalForm(id)} fullWidth>Edit</Button>
+      <Button variant="contained" color="error" sx={Styles.buttonSpaceTop} onClick={() => onDelete(id)} fullWidth>Delete</Button>
     </Box>
   );
 };
 
-export default TaskItem;
+export default memo(TaskItem);

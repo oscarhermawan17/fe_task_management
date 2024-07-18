@@ -8,14 +8,13 @@ const mockTask = {
   id: 1,
   title: 'Sample Task',
   description: 'This is a sample task description.',
-  status: 'Pending'
 };
 
 const mockOnDelete = vi.fn();
 const mockOpenModalForm = vi.fn();
 
 const defaultProps: TaskItemProps = {
-  task: mockTask,
+  ...mockTask,
   onDelete: mockOnDelete,
   openModalForm: mockOpenModalForm,
 };

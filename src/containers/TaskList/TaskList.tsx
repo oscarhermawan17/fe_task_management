@@ -1,4 +1,4 @@
-import { Suspense, lazy, useState, useEffect } from 'react';
+import { Suspense, lazy, useState, useEffect, useCallback } from 'react';
 import { Container, Box, CircularProgress, Button, Modal } from '@mui/material';
 import Grid from "@mui/system/Unstable_Grid"
 import axios from 'axios';
@@ -26,7 +26,7 @@ const TaskList = ({ token } : { token:  string | null }) => {
     .catch(error => console.error(error));
   }, []);
 
-  const handleDelete = async (id: number | undefined) => {
+  const handleDelete = useCallback(async (id: number | undefined) => {
     try {
       const response = await axios.delete(`${import.meta.env.VITE_API_URL}/tasks/${id}`, {
         headers: {
@@ -41,9 +41,9 @@ const TaskList = ({ token } : { token:  string | null }) => {
     } catch (error) {
       console.error('Error deleting task:', error);
     }
-  }
+  }, [tasks])
 
-  const openModal = (id: number | undefined) => {
+  const openModal = useCallback((id: number | undefined) => {
     const taskValue = tasks.find(task => task.id === id)
     if(taskValue === undefined) {
       setDefaultUpdatedValues(undefined)
@@ -56,7 +56,7 @@ const TaskList = ({ token } : { token:  string | null }) => {
       })
     }
     setModalForm(true)
-  }
+  }, [tasks])
 
   const closeAndReset = () => {
     setDefaultUpdatedValues(undefined)
@@ -117,7 +117,12 @@ const TaskList = ({ token } : { token:  string | null }) => {
       <Grid container spacing={1}>
         {tasks.filter(filterTask => filterTask.status === status).map(task => (
           <Grid md={6} xs={12} key={task.id}>
-            <TaskItem key={task.id} task={task} onDelete={handleDelete} openModalForm={openModal}/>
+            <TaskItem 
+              key={task.id}
+              {...task}
+              onDelete={handleDelete}
+              openModalForm={openModal}
+            />
           </Grid>
         ))}
       </Grid>
