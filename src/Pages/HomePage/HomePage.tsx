@@ -1,6 +1,6 @@
 
 import { useState, useEffect } from 'react';
-import { Container, Box, Button } from '@mui/material';
+import { Container, Box, Button, CircularProgress } from '@mui/material';
 import { useNavigate } from 'react-router-dom';
 
 import TaskList from "../../containers/TaskList"
@@ -22,6 +22,10 @@ const HomePage = () => {
     localStorage.removeItem('token');
     setToken(null)
   };
+
+  if(token === null) {
+    return <CircularProgress />;
+  }
 
   return (
     <Container maxWidth="xl">

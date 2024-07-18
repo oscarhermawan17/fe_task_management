@@ -20,11 +20,11 @@ export default function SignIn() {
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    const username = data.get('email');
+    const username = data.get('username');
     const password = data.get('password');
 
     try {
-      const response = await axios.post('http://localhost:3018/signin', {
+      const response = await axios.post(`${import.meta.env.VITE_API_URL}/signin`, {
         username,
         password,
       });
@@ -70,10 +70,10 @@ export default function SignIn() {
               margin="normal"
               required
               fullWidth
-              id="email"
-              label="Email Address"
-              name="email"
-              autoComplete="email"
+              id="username"
+              label="Username"
+              name="username"
+              autoComplete="username"
               autoFocus
             />
             <TextField

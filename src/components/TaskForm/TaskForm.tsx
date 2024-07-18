@@ -50,7 +50,7 @@ const TaskForm: React.FC<TaskFormProps> = ({ onSubmit, defaultValues }) => {
           defaultValue={defaultValues?.status}
         >
           {statusData.map(status => (
-            <MenuItem value={status}>{status}</MenuItem>
+            <MenuItem key={status} value={status}>{status}</MenuItem>
           ))}
         </Select>
         {errors.status && <FormHelperText>{errors.status.message}</FormHelperText>}
