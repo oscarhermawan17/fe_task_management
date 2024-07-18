@@ -1,7 +1,7 @@
 ## Front End - Task Managemenent App
 Front End Task Management
 
-### 1 - Overview of this application
+### 1. Overview of this application
 This is an app for organizing users' tasks. Users can view their task lists, create new tasks, update existing tasks, and delete tasks.
 Technologies Used:
 <ul>
@@ -11,7 +11,7 @@ Technologies Used:
 </ul>
 
 
-### 2 - Minimun Requirement
+### 2. Minimun Requirement
 Node Version 18.x.x. I recommend using Node Version 20.x.x (LTS Version).
 
 ### 3. How To Run This App (Step by Step) ?
