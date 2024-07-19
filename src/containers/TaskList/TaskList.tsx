@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import { fakeDataStatus } from './TaskListData'
 import TaskForm from '../../components/TaskForm';
-import type { TaskFormData } from './TaskList.type'
+import type { TaskFormWithIdUndefined, TaskFormData } from './TaskList.type'
 import Styles from './TaskList.style';
 
 const TaskItem = lazy(() => import('../../components/TaskItem'));
@@ -35,37 +35,26 @@ const TaskList = ({ token } : { token:  string | null }) => {
       });
   
       if (response.status === 204) {
-        const deleteSelectedTask = tasks.filter(task => task.id !== id)
-        setTasks(deleteSelectedTask)
+        setTasks((prevTasks) => prevTasks.filter(task => task.id !== id))
       }
     } catch (error) {
       console.error('Error deleting task:', error);
     }
-  }, [tasks])
+  }, [])
 
-  const openModal = useCallback((id: number | undefined) => {
-    const taskValue = tasks.find(task => task.id === id)
-    if(taskValue === undefined) {
-      setDefaultUpdatedValues(undefined)
-    } else {
-      setDefaultUpdatedValues({
-        id: id,
-        title: taskValue.title,
-        description: taskValue.description,
-        status: taskValue.status
-      })
-    }
+  const openModalUpdate = useCallback((task: TaskFormData) => {
+    setDefaultUpdatedValues(task)
     setModalForm(true)
-  }, [tasks])
+  }, [])
 
   const closeAndReset = () => {
     setDefaultUpdatedValues(undefined)
     setModalForm(false)
   }
 
-  const submitTask = async (newTask: TaskFormData) => {
+  const submitTask = async (newTask: TaskFormData | TaskFormWithIdUndefined) => {
     // If have ID, it should be Update
-    if(newTask.id) {
+    if(newTask.id !== undefined) {
       try {
         const response = await axios.put(`${import.meta.env.VITE_API_URL}/tasks/${newTask.id}`, {
           title: newTask.title,
@@ -121,7 +110,7 @@ const TaskList = ({ token } : { token:  string | null }) => {
               key={task.id}
               {...task}
               onDelete={handleDelete}
-              openModalForm={openModal}
+              openModalUpdate={openModalUpdate}
             />
           </Grid>
         ))}

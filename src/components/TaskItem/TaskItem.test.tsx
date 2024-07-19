@@ -8,15 +8,16 @@ const mockTask = {
   id: 1,
   title: 'Sample Task',
   description: 'This is a sample task description.',
+  status: 'In Progress'
 };
 
 const mockOnDelete = vi.fn();
-const mockOpenModalForm = vi.fn();
+const mockOpenModalUpdate = vi.fn();
 
 const defaultProps: TaskItemProps = {
   ...mockTask,
   onDelete: mockOnDelete,
-  openModalForm: mockOpenModalForm,
+  openModalUpdate: mockOpenModalUpdate,
 };
 
 describe('TaskItem', () => {
@@ -34,7 +35,7 @@ describe('TaskItem', () => {
 
     fireEvent.click(screen.getByText('Edit'));
 
-    expect(mockOpenModalForm).toHaveBeenCalledWith(mockTask.id);
+    expect(mockOpenModalUpdate).toHaveBeenCalledWith(mockTask);
   });
 
   it('It should calls onDelete when Edit button is clicked', () => {

@@ -1,7 +1,11 @@
-export type TaskItemProps = {
-  id: number | undefined;
+type TaskFormData = {
+  id: number;
   title: string;
   description: string;
-  onDelete: (id: number | undefined) => Promise<void>;
-  openModalForm: (id: number | undefined) => void;
+  status: string;
+}
+
+export type TaskItemProps = TaskFormData & {
+  onDelete: (id: number) => Promise<void>;
+  openModalUpdate: (task: TaskFormData) => void;
 }
