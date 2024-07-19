@@ -9,6 +9,7 @@ Technologies Used:
   <li>Vite JS</li>
   <li>Material UI</li>
 </ul>
+App running on [here](http://203.194.112.12:3017) with default username: <code>oscar</code>, and password: <code>oscar</code><br/>
 The BackEnd (RESTful API app) can be seen [here](https://github.com/oscarhermawan17/be_task_management)
 
 
